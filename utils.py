@@ -1,10 +1,11 @@
 import os
 
 from dotenv import load_dotenv
-from langchain_groq import ChatGroq
-from langchain.prompts import ChatPromptTemplate
-from langchain_community.utilities import WikipediaAPIWrapper
 from langfuse import Langfuse
+from langfuse.callback import CallbackHandler
+from langchain.prompts import ChatPromptTemplate
+from langchain_groq import ChatGroq
+from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
 
 load_dotenv()
 
@@ -15,33 +16,32 @@ langfuse = Langfuse(
     host=os.getenv("LANGFUSE_HOST_URL"),
 )
 
-def generate_script(subject, video_length, creativity, api_key):
+llama32_90b = ChatGroq(
+                model="llama-3.2-90b-vision-preview",
+                temperature=0.0,
+                max_retries=2,
+                api_key=os.getenv("GROQ_API_KEY")
+                # other params...
+            )
 
-    model = ChatGroq(api_key=api_key, temperature=creativity)
+def generate_caption(theme):
+
+    # ---CHAT PROMPT TEMPLATE---
+    caption_generator_prompt = langfuse.get_prompt("caption-gen-chat", label="latest", type="chat")
+    caption_generator_prompt_langchain = ChatPromptTemplate.from_messages(caption_generator_prompt.get_langchain_prompt())
     
-    title_checker_prompt = langfuse.get_prompt("title-chat", label="latest", type="chat")
-    title_checker_prompt_langchain = ChatPromptTemplate.from_messages(title_checker_prompt.get_langchain_prompt())
-    # LCEL chain (Same as how you created using chain as usual)
-    title_chain = title_checker_prompt_langchain | model
-    
-    script_generator_prompt = langfuse.get_prompt("video-script-chat", label="latest", type="chat")
-    script_generator_prompt_langchain = ChatPromptTemplate.from_messages(script_generator_prompt.get_langchain_prompt())
-    # LCEL chain (Same as how you created using chain as usual)
-    script_chain = script_generator_prompt_langchain | model
+    caption_generator_chain = (
+    caption_generator_prompt_langchain
+    | llama32_90b
+    | StrOutputParser()
+    )
+    # ---CHAT PROMPT TEMPLATE---
 
-    # We use .content, so we get only the content, and no other useless sentence
-    title = title_chain.invoke({"subject": subject}).content
-
-    # We take in WikipediaAPI (search engine)
-    search = WikipediaAPIWrapper(lang="en") 
-    search_result = search.run(subject)
-
-    video_script = script_chain.invoke({"title": title, "duration": video_length,
-                                  "wikipedia_search": search_result}).content
-
-    # Once every information fulfilled, video generator outputs only these 3
-    return search_result, title, video_script
+    result = caption_generator_chain.invoke({
+        "theme": theme
+    })
+    return result
 
 # ---------- TESTING ----------
-print(generate_script("llama模型", 1, 0.7, os.getenv("GROQ_API_KEY")))
+# print(generate_caption("人工智能"))
 # ---------- TESTING ----------
