@@ -27,7 +27,7 @@ llama32_90b = ChatGroq(
 def generate_caption(theme):
 
     # ---CHAT PROMPT TEMPLATE---
-    caption_generator_prompt = langfuse.get_prompt("caption-gen-chat", label="latest", type="chat")
+    caption_generator_prompt = langfuse.get_prompt("caption-gen-chat", label="production", type="chat")
     caption_generator_prompt_langchain = ChatPromptTemplate.from_messages(caption_generator_prompt.get_langchain_prompt())
     
     caption_generator_chain = (
@@ -43,5 +43,5 @@ def generate_caption(theme):
     return result
 
 # ---------- TESTING ----------
-# print(generate_caption("人工智能"))
+# print(generate_caption("TANK 300越野车"))
 # ---------- TESTING ----------

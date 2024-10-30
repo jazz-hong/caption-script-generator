@@ -2,7 +2,7 @@ import streamlit as st
 from utils import generate_caption
 
 
-st.header("CAPTION GENERATOR 爆款社交媒体AI写作助手 ✏️")
+st.header("CAPTION GENERATOR 爆款社交媒体助手 ✏️")
 # with st.sidebar:
 #     openai_api_key = st.text_input("请输入OpenAI API密钥：", type="password")
 #     st.markdown("[获取OpenAI API密钥](https://platform.openai.com/account/api-keys)")
