@@ -1,0 +1,65 @@
+// This is a sample devcontainer file. You should copy this file and rename to it
+// devcontainer.json
+
+{
+	// This is a generic container with gpu support:
+	// I also took the liberty to enable zsh and powerlevel10k for you
+	"build": {
+		"dockerfile": "python3/Dockerfile",
+		"args": {
+			// The image tag to use
+			"IMAGE_TAG": "3.10",
+            // You definitely should change this to your UID and username,
+			// otherwise files created in the container is going to be owned by uid 1000
+			"USERNAME": "USER",
+			"USER_UID": "197609"
+		}
+	},
+
+	// If you want to use Tensorflow with GPU support, here's another example:
+	// "build": {
+	// 	"dockerfile": "tensorflow/Dockerfile",
+	// 	"args": {
+	// 		// The tensorflow image to use
+	// 		"IMAGE_TAG": "2.10.0-gpu",
+    //         // You definitely should change this to your UID and username,
+	// 		// otherwise files created in the container is going to be owned by uid 1000
+	// 		"USERNAME": "vscode",
+	// 		"USER_UID": "1000"
+	// 	}
+	// },
+
+	// Make GPU visible to container
+	"hostRequirements": {
+		"gpu": true
+	},
+
+	// "runArgs": [
+		// "--network=langfuse_default",
+		// "--network=hafiz-gpt-scorer_default",
+		// "--network=host"
+	// ],
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// This helps you to install the dev packages
+	"onCreateCommand": "pip install -r dev-requirements.txt",
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "pip install -r requirements.txt",
+
+	// Various extensions you "should" need, same as the recommended list supplied
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"njpwerner.autodocstring",
+				"iterative.dvc@1.1.2",
+				"GitLab.gitlab-workflow",
+				"bierner.markdown-mermaid",
+				"redhat.vscode-yaml"
+			]
+		}
+	}
+}

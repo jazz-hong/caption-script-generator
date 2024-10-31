@@ -1,0 +1,2 @@
+pylint>=3.0.3   # there is currently and issue with pylint-gitlab not working with pylint>=2.15 for now
+pylint-gitlab==2.0.0
