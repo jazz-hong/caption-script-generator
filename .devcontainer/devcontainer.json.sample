@@ -8,11 +8,11 @@
 		"dockerfile": "python3/Dockerfile",
 		"args": {
 			// The image tag to use
-			"IMAGE_TAG": "11.8.0-cudnn8-runtime-ubuntu22.04",
+			"IMAGE_TAG": "3.10",
             // You definitely should change this to your UID and username,
 			// otherwise files created in the container is going to be owned by uid 1000
-			"USERNAME": "vscode",
-			"USER_UID": "1000"
+			"USERNAME": "USER",
+			"USER_UID": "USER_ID"
 		}
 	},
 
@@ -33,6 +33,12 @@
 	"hostRequirements": {
 		"gpu": true
 	},
+
+	// "runArgs": [
+		// "--network=langfuse_default",
+		// "--network=hafiz-gpt-scorer_default",
+		// "--network=host"
+	// ],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
