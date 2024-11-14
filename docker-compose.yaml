@@ -9,5 +9,6 @@ services:
       - "1111:8501"
     volumes:
       - .:/app
+    restart: always
     # environment:
     #   - STREAMLIT_SERVER_PORT=8501
